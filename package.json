@@ -1,0 +1,55 @@
+{
+      "name": "myreact",
+      "version": "0.1.0",
+      "private": true,
+      "dependencies": {
+            "antd": "^3.23.1",
+            "antd-mobile": "^2.2.11",
+            "axios": "^0.19.0",
+            "babel-plugin-import": "^1.11.0",
+            "customize-cra": "^0.2.12",
+            "dva": "^2.4.1",
+            "es6-promise": "^4.2.6",
+            "events": "^3.0.0",
+            "history": "^4.9.0",
+            "less": "^3.9.0",
+            "less-loader": "^5.0.0",
+            "prop-types": "^15.7.2",
+            "qiniu-js": "^2.5.4",
+            "react": "^16.8.6",
+            "react-app-rewired": "^2.1.1",
+            "react-dom": "^16.8.6",
+            "react-redux": "^7.0.3",
+            "react-router-config": "^5.0.0",
+            "react-router-dom": "^5.0.0",
+            "react-router-native": "^5.0.0",
+            "react-scripts": "3.0.0",
+            "redux": "^4.0.1",
+            "redux-logger": "^3.0.6",
+            "redux-thunk": "^2.3.0",
+            "remote-redux-devtools": "^0.5.16",
+            "wangeditor": "^3.1.1",
+            "whatwg-fetch": "^3.0.0"
+      },
+      "scripts": {
+            "start": "react-app-rewired start",
+            "build": "react-app-rewired build",
+            "test": "react-app-rewired test",
+            "eject": "react-app-rewired eject"
+      },
+      "eslintConfig": {
+            "extends": "react-app"
+      },
+      "browserslist": {
+            "production": [
+                  ">0.2%",
+                  "not dead",
+                  "not op_mini all"
+            ],
+            "development": [
+                  "last 1 chrome version",
+                  "last 1 firefox version",
+                  "last 1 safari version"
+            ]
+      }
+}

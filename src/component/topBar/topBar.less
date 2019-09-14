@@ -1,0 +1,36 @@
+@import "../../index.less";
+
+.topBar{
+    height:110px;
+    background:@bgg;
+    width: 100%;
+    .flexBox(center,flex-start);
+    .textContent{
+        .flexBox();
+        color:@commonFontColor;
+        margin-left: 110px;
+        .left,.right{
+            font-weight: bold;
+            font-size: @smallFontSize;
+            max-width: 150px;
+            .enText{
+                line-height:@commonTextSize;
+                max-width: 198px;
+            }
+            .bgTitle{
+                font-size: @bigTitleSize;
+            }
+        }
+        .right{
+            font-weight: normal;
+            max-width: 210px;
+        }
+        .midLine{
+            width: 2px;
+            background: @commonFontColor;
+            height:64px;
+            margin-left: 26px;
+            margin-right:30px;
+        }
+    }
+}

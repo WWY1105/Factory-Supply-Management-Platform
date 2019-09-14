@@ -1,0 +1,117 @@
+@import '~antd/dist/antd.css';
+
+@primary-color: #017EFF; //主题色
+@siderBg:#2a3f54;//左边菜单颜色
+@redColor:#FF2424;  //警告字体颜色
+@commonFontColor:#232323;// 一般字体颜色
+@contentTextColor:#6F6F6F;// 中间内容的字体颜色
+@bgg:#ededed;//顶部栏背景色
+@smallFontSize:12px; // 提示信息字体大小\
+@siderFontSize:14px;
+@commonTextSize:18px;
+@fs16:16px;
+@fs22:22px;
+@wc:#fff;
+@bigTitleSize:35px;
+@zero:0;
+@MenuIconSize:26px;//菜单icon的大小
+@menuContentText:24px;
+@logoIconSize:29px;
+@menuItemH:80px;
+@f6:#f6f6f6;
+@borderColor:#cdcdcd;
+@marginBotton:{
+  margin-bottom: 10px
+};
+@marginTop:{
+  margin-top: 10px
+};
+@flexSpace:{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+};
+@flexCenter:{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+};
+@flexStart:{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+};
+@flexWrap:{
+  flex-wrap: wrap;
+};
+body,html,#root{
+ margin:@zero;
+ width: 100%;
+ height: 100%;
+
+};
+p,span{
+  margin:@zero
+};
+.am-button {
+  @marginTop();
+};
+.am-button span{
+  color:#fff!important;
+};
+// flex
+.flexBox(@al:center,@ju:center, @di:row){
+  display: flex;
+  align-items: @al;
+  justify-content: @ju;
+  flex-direction: @di;
+}
+
+
+// lex
+// 函数
+.margin(@t,@r,@b,@l){
+  margin:@t @r @b @l;
+}
+.pd(@t,@r,@b,@l){
+  padding: @t @r @b @l
+}
+// common
+@commonWText:{
+  font-size:@commonTextSize;
+  color:@wc;
+};
+
+// 覆盖
+.ant-btn-primary{
+  background: @primary-color;
+  border-radius: 4px;
+}
+.ant-form-item{
+  margin-bottom: 0;
+}
+
+
+
+//------------main------------
+.textCenter{
+  text-align: center
+}
+.textLeft{
+  text-align: left
+}
+.textRight{
+  text-align: right
+}
+.ant-input,.ant-select-selection--single{
+  border-color: #808080;
+  border-radius: 0;
+}
+.ant-table-column-title{
+  font-size: @commonTextSize;
+  color: @siderBg;
+  font-weight: 600;
+}
+.ant-table-thead > tr > th{
+  background: @wc;
+}
