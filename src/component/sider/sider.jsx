@@ -1,15 +1,12 @@
 import React,{Component} from 'react'
-import emitter from '../../util/events'
-import {Layout, Menu, Icon,Row,Col} from 'antd'
+import {Layout, Menu} from 'antd'
 import { Link,withRouter  } from 'react-router-dom'
-import {setLeftNav,setPageTitle} from '../../store/actions'
+import {setPageTitle} from '../../store/actions'
 import {connect }from 'react-redux'
-import store from '../../store/index';
 
 
 import './sider.less'
 const {Sider}=Layout;
-const { SubMenu } = Menu;
 class LSider extends Component{
         constructor(props){
             super(props)

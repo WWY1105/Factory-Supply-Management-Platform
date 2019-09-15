@@ -1,8 +1,10 @@
 import React,{Component} from 'react'
 import './commodity_management.less'
-import {Row,Col,Button,Select,Table,message} from 'antd'
+import {Row,Col,Button,Select,Table,message,Icon} from 'antd'
+import {connect} from 'react-redux'
 const { Option } = Select;
-const columns = [
+const { Column, ColumnGroup } = Table;
+const  columns=[
     {
       title: 'ID',
       dataIndex: 'id',
@@ -10,30 +12,30 @@ const columns = [
     },
     {
       title: '主图',
-      dataIndex: 'goodsCover ',
-      key: 'goodsCover ',
+      dataIndex: 'goodsCover',
+      key: 'goodsCover',
     },
     {
       title: '商品名称',
-      dataIndex: 'goodsName ',
-      key: 'goodsName ',
+      dataIndex: 'goodsName',
+      key: 'goodsName',
     },{
         title: '单价',
-        dataIndex: 'marketPrice',
-        key: 'marketPrice',
+        dataIndex: 'goodsInventorys',
+        key: 'goodsInventorys'
       },{
         title: '库存',
-        dataIndex: 'inventoryNum  ',
-        key: 'inventoryNum  ',
+        dataIndex: 'inventoryNum',
+        key: 'inventoryNum',
       },{
         title: '单位',
-        dataIndex: 'unit ',
-        key: 'unit ',
+        dataIndex: 'unit',
+        key: 'unit',
       },
       {
         title: '运费',
-        dataIndex: 'logisticsFee ',
-        key: 'logisticsFee ',
+        dataIndex: 'logisticsFee',
+        key: 'logisticsFee',
       },
       {
         title: '发货时间',
@@ -51,8 +53,8 @@ const columns = [
       },
       {
         title: '上下架',
-        dataIndex: 'goodsStatus ',
-        key: 'goodsStatus ',
+        dataIndex: 'goodsStatus',
+        key: 'goodsStatus',
       },{
         title: '排序',
         dataIndex: 'sort',
@@ -79,18 +81,43 @@ class CommodityManagement extends Component{
         }
     }
     // 点击新增
-    gotoEdit(){
+    gotoEdit=(id)=>{
         // 跳转编辑页面
-        this.props.history.push({
-            pathname:'goods_edit'
-        })
+        let filterArr;
+        let filterObj;
+        // console.log(id)
+        // return false;
+        if(id){
+            let filterArr=this.state.dataSource.filter((i,j)=>{
+                if(i.id==id){
+                    return true;
+                }
+            })
+            if(filterArr.length>0){
+                filterObj=filterArr[0]
+            }
+            console.log(filterObj)
+            this.props.history.push({
+                pathname:'goods_edit',
+                state:{
+                    filterGood:filterObj
+                }
+            })
+
+        }else{
+            this.props.history.push({
+                pathname:'goods_edit',
+            })
+        }
+        
     }
     // 获取列表
     getGoodsList=()=>{
         console.log('执行了')
         window.http('get','business/goods/findGoodses?pageSize='+this.state.pageSize+"&pageNum="+this.state.pageNum).then((res)=>{
             if(res.data.code=='10000'){
-                console.log(res)
+                let dataSource=res.data.content.dataList;
+                this.setState({dataSource})
             }else{
                 message.error(res.data.message);
             }
@@ -140,11 +167,109 @@ class CommodityManagement extends Component{
                     </Row>
                 </div> 
                 {/* 顶部搜索结束 */}
-                <Table dataSource={this.state.dataSource} columns={columns} bordered pagination="bottom"/>;
+                <Table dataSource={this.state.dataSource}  bordered pagination="bottom" size="small" rowKey={record=>record.id}>
+                    <Column align="center" title="ID" dataIndex="id" key="id" />
+                    <Column align="center" title="主图" dataIndex="goodsImages" key="goodsImages" 
+                        render={goodsImages => (
+                            <div>
+                            {goodsImages?
+                                goodsImages.map((item,index) => (
+                                    <p style={{marginBottom:15}} key={index}><img  className="mainPic" src={this.props.imgUrl+item}/> </p>
+                                )):''}
+                          </div>
+                            
+                          )}
+                    />
+                    <Column align="center" title="商品名称" dataIndex="goodsName" key="goodsName" />
+                    <Column align="center" title="商品单价" dataIndex="goodsInventorys1" key="goodsInventorys1" 
+                        render={goodsInventorys => (
+                            <span>
+                              {goodsInventorys?
+                              goodsInventorys.map((item,index) => (
+                                <p key={index} className="tableNum textCenter">￥{item.supplyPrice}</p>
+                              )):''}
+                            </span>
+                          )}
+                    />
+                     <Column align="center" title="库存" dataIndex="goodsInventorys2" key="goodsInventorys2" 
+                        render={goodsInventorys => (
+                            <span>
+                              {goodsInventorys?
+                              goodsInventorys.map((item,index) => (
+                                <p key={index} className="tableCommonText">{item.inventoryNum}</p>
+                              )):''}
+                            </span>
+                          )}
+                    />
+                     
+                     <Column align="center" title="单位" dataIndex="unit" key="unit" />
+                     <Column align="center" title="运费" dataIndex="logisticsFee" key="logisticsFee" />
+                     <Column align="center" title="发货时间" dataIndex="deliveryDays" key="deliveryDays"
+                        render={deliveryDays => (
+                            <span>
+                             {deliveryDays}天内
+                            </span>
+                          )}
+                     />
+                     <Column align="center" title="大分类" dataIndex="goodsCategorys1" key="goodsCategorys1" 
+                        render={goodsCategorys => (
+                            <span>
+                              {goodsCategorys?
+                              goodsCategorys.map((item,index) => (
+                                <p key={index}>{item.level=='1'?item.categoryName:''}</p>
+                              )):''}
+                            </span>
+                          )}
+                    />
+                     <Column align="center" title="小分类" dataIndex="goodsCategorys2" key="goodsCategorys2" 
+                        render={goodsCategorys => (
+                            <span>
+                              {goodsCategorys?
+                              goodsCategorys.map((item,index) => (
+                                <p key={index}>{item.level=='2'?item.categoryName:''}</p>
+                              )):''}
+                            </span>
+                          )}
+                    />
+                    <Column align="center" title="上下架" dataIndex="goodsStatus" key="goodsStatus" 
+                        render={goodsStatus => (
+                            <span>
+                              {goodsStatus=='1'?'上架':goodsStatus=='0'?'上架中':'下架'}
+                            </span>
+                          )}
+                    />
+                    <Column align="center" title="排序" dataIndex="id" key="sort" 
+                        render={(id) => (
+                            <span>
+                              <Icon type="up-square" />
+                              <Icon type="down-square" />
+                            </span>
+                          )}
+                    />
+                    <Column align="center" title="删除" dataIndex="id" key="delete" 
+                       render={id => (
+                        <span className="tableDelete">
+                          删除
+                        </span>
+                      )}
+                    />
+                    <Column align="center" title="其他" dataIndex="id" key="other" 
+                        render={id => (
+                            <span  className="tableEdit" onClick={()=>{this.gotoEdit(id)}} id={id}>
+                              编辑
+                            </span>
+                          )}
+                    />
+                </Table>
                 
             </div>
         )
     }
 }
 
-export default CommodityManagement;
+const mapStateToProps=(state)=>{
+    return {
+        imgUrl:state.imgUrl
+    }
+}
+export default connect(mapStateToProps)(CommodityManagement);

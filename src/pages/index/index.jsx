@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import store from '../../store/index'
-import emitter from '../../util/events'
-import commonObj from '../../assets/js/common'
+// import emitter from '../../util/events'
+// import commonObj from '../../assets/js/common'
 import './index.less'
 import CommodityManagement from '../../pages/commodity_management/commodity_management'
 import ApplicationForCash from '../../pages/application_for_cash/application_for_cash'
@@ -17,10 +17,10 @@ import LSider from '../../component/sider/sider'
 // connect方法的作用：将额外的props传递给组件，并返回新的组件，组件在该过程中不会受到影响
 import {Layout} from 'antd';
 import TopBar from '../../component/topBar/topBar'
-import {setLeftNav} from '../../store/actions'
-import { BrowserRouter,Route ,Switch} from 'react-router-dom'
-const {changeTab} =  {...commonObj}
-const {Footer,Sider,Content,Header}=Layout;
+// import {setLeftNav} from '../../store/actions'
+import {Route ,Switch} from 'react-router-dom'
+// const {changeTab} =  {...commonObj}
+const {Content,Header}=Layout;
 class Index extends Component {
     constructor(props) {
         super(props)

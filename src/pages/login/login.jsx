@@ -1,13 +1,13 @@
 import React,  {Component}from 'react'
 
-import commonObj from '../../assets/js/common'
+// import commonObj from '../../assets/js/common'
 import './login.less'
 import TopBar from '../../component/topBar/topBar'
 import LoginComponent from '../../component/loginComponent/loginComponent'
 import RegisterComponent from '../../component/registerComponent/registerComponent'
 // import PropTypes from 'prop-types'; 
 import {connect }from 'react-redux'
-import {message } from 'antd';
+// import {message } from 'antd';
 // connect方法的作用：将额外的props传递给组件，并返回新的组件，组件在该过程中不会受到影响
 
 //  import {setGradeList, setPageTitle,getBanner} from '../../store/actions'
