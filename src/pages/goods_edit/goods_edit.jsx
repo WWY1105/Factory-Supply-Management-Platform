@@ -85,6 +85,7 @@ class GoodsEdit extends Component{
         // 选中的大分类-------start
         let chooseBigList=[];
         let chooseSmallList=[];
+       
         this.props.history.location.state.filterGood.goodsCategorys.map((i,j)=>{
             if(i.level==1){
                 chooseBigList.push(i.categoryId)
@@ -92,10 +93,28 @@ class GoodsEdit extends Component{
                 chooseSmallList.push(i.categoryId)
             }
         })
-        this.setState({chooseBigList,chooseSmallList});
-    }
-        console.log()
         // 选中的大分类-------end;
+        // 规格、价格、库存-------start
+        let goodsInventorys=this.props.history.location.state.filterGood.goodsInventorys;
+         // 规格、价格、库存-------end
+         // 主图
+         let newFileList=this.props.history.location.state.filterGood.goodsImages
+         let fileList=[]
+         newFileList.map((i,j)=>{
+             let obj={
+                name:'',
+                 ui:'-'+j,
+                status:'done',
+                url: this.props.imgUrl + i
+             }
+             fileList.push(obj)
+         })
+         this.setState({chooseBigList,chooseSmallList,goodsInventorys,fileList});
+        console.log('-----------------')
+        console.log(fileList)
+    }
+       
+      
         this.getBigCategory()
         this.getToken()
     }
@@ -164,8 +183,8 @@ class GoodsEdit extends Component{
         let goodsInventorys=this.state.goodsInventorys;
         goodsInventorys.push({
             //goodsId: 0,
-            inventoryNum: 0,// 库存数量
-            supplyPrice : 0, // 价格
+            inventoryNum: '',// 库存数量
+            supplyPrice : '', // 价格
             specifications: '',// 规格,
             salePrice :0// 销售价格，去掉
         })
@@ -178,7 +197,6 @@ class GoodsEdit extends Component{
        this.setState({currentPicIndex:j})
     }
     changeHandler=({file, fileList})=>{   
-         
             let goodsImage='';
             const {uid, name, type, thumbUrl, status, response = {}} = file
             const fileItem = {
@@ -190,14 +208,10 @@ class GoodsEdit extends Component{
             url: this.props.imgUrl + (response.hash || '')
             }
             hashArr.push(response.hash)
-            // hashArr.push(response.hash)
-            // console.log(hashArr)
-            // goodsImage=hashArr.join(',')
-            // console.log(goodsImage)
-            // this.setState({goodsImage})
             fileList.pop()
             fileList.push(fileItem)
             this.setState({fileList})
+            console.log(fileList)
       }
     // 点击大保存
     save_data=()=>{
@@ -401,17 +415,17 @@ class GoodsEdit extends Component{
                             <Row gutter={50} key={index} style={{marginBottom:20}}>
                                 <Col span={8} className="flexBox">
                                     <span className="leftText">规格{index+1}</span>
-                                    <Input onChange={(e)=>{this.handleChange(e,'specifications','goodsInventorys',index)}} type="text" style={{width:'90%'}}  placeholder="" />
+                                    <Input value={item.specifications} onChange={(e)=>{this.handleChange(e,'specifications','goodsInventorys',index)}} type="text" style={{width:'90%'}}  placeholder="" />
                                 </Col>
                                 <Col span={8}>
                                     <Row gutter={30}>
                                         <Col span={12} className="flexBox" >
                                             <span className="leftText">库存</span>
-                                            <Input type="number"  onChange={(e)=>{this.handleChange(e,'inventoryNum','goodsInventorys',index)}} className="inputBox" placeholder="" />
+                                            <Input type="number" value={item.inventoryNum} onChange={(e)=>{this.handleChange(e,'inventoryNum','goodsInventorys',index)}} className="inputBox" placeholder="" />
                                         </Col>
                                         <Col span={12} className="flexBox">
                                             <span className="leftText">价格（￥）</span>
-                                            <Input type="number"  className="inputBox" onChange={(e)=>{this.handleChange(e,'supplyPrice','goodsInventorys',index)}}  placeholder="" />
+                                            <Input type="number" value={item.supplyPrice}  className="inputBox" onChange={(e)=>{this.handleChange(e,'supplyPrice','goodsInventorys',index)}}  placeholder="" />
                                         </Col>
                                     </Row>
                                 </Col>
