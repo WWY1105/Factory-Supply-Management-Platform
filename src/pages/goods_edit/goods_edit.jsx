@@ -97,21 +97,26 @@ class GoodsEdit extends Component{
         // 规格、价格、库存-------start
         let goodsInventorys=this.props.history.location.state.filterGood.goodsInventorys;
          // 规格、价格、库存-------end
-         // 主图
+         // 主图----start
          let newFileList=this.props.history.location.state.filterGood.goodsImages
          let fileList=[]
          newFileList.map((i,j)=>{
              let obj={
-                name:'',
-                 ui:'-'+j,
+                name:j,
+                uid:'-'+(j+1),
                 status:'done',
                 url: this.props.imgUrl + i
              }
              fileList.push(obj)
          })
-         this.setState({chooseBigList,chooseSmallList,goodsInventorys,fileList});
-        console.log('-----------------')
-        console.log(fileList)
+          // 主图----end
+          // 物流----strat
+         let logisticsMode =this.props.history.location.state.filterGood.logisticsMode;
+         let logisticsFee =this.props.history.location.state.filterGood.logisticsFee;
+         let deliveryDays  =this.props.history.location.state.filterGood.deliveryDays
+          // 物流----end
+        this.setState({chooseBigList,chooseSmallList,goodsInventorys,fileList,logisticsMode,logisticsFee,deliveryDays});
+      
     }
        
       
@@ -124,6 +129,9 @@ class GoodsEdit extends Component{
         window.http('get','business/category/findFistGradeCategories').then((res)=>{
             if(res.data.code=='10000'){
                 this.setState({bigCategoryList:res.data.content});
+                if(res.data.content.length>0){
+                    this.getSmallCategory(res.data.content[0].id)
+                }
                 console.log(this.state.bigCategoryList)
             }else{
                 message.error(res.data.message);
@@ -132,7 +140,6 @@ class GoodsEdit extends Component{
     }
     // 获取二级分类
     getSmallCategory=(id)=>{
-        console.log('获取二级分类')
         let goodsCategorys=this.state.goodsCategorys;
         let obj={}
         obj.categoryId=id;
@@ -287,7 +294,7 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.getSmallCategory}
+                            // onChange={this.getSmallCategory}
                             >
                                 {
                                 this.state.bigCategoryList.map((bigItem,bigIndex)=>{
@@ -330,7 +337,7 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.getSmallCategory}
+                            // onChange={this.getSmallCategory}
                             >
                                 {
                                 this.state.bigCategoryList.map((bigItem,bigIndex)=>{
@@ -373,7 +380,7 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.getSmallCategory}
+                            // onChange={this.getSmallCategory}
                             >
                                 {
                                 this.state.bigCategoryList.map((bigItem,bigIndex)=>{
@@ -472,25 +479,26 @@ class GoodsEdit extends Component{
                             <Select
                                 showSearch
                                 defaultValue="0"
+                                value={this.state.logisticsMode+''}
                                 style={{ width:140 }}
                                 optionFilterProp="children"
                                 className="selectBox"
                                 onChange={(e)=>{this.handleChange(e,'logisticsMode')}}
                                >
-                                    
-                                    <Option value="0">包邮</Option>
+                                <Option value="0">包邮</Option>
                                 </Select>    
                         </Col>
                         <Col span={8} className="flexBox">
                             <span className="leftText">物流费用￥</span>
-                            <Input type="text"  onChange={(e)=>{this.handleChange(e,'logisticsFee')}}  className="inputBox"  placeholder="" />
+                            <Input type="text" value={this.state.logisticsFee+''}  onChange={(e)=>{this.handleChange(e,'logisticsFee')}}  className="inputBox"  placeholder="" />
 
                         </Col>
                         <Col span={8} className="flexBox">
                             <span className="leftText">发货时间</span>
                             <Select
                                 showSearch
-                                defaultValue="0"
+                                defaultValue="0" 
+                                value={this.state.deliveryDays+''}
                                 style={{ width:140 }}
                                 optionFilterProp="children"
                                 className="selectBox"
