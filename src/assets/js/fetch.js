@@ -88,7 +88,7 @@ function http(method, url, param,json,imgToken) {
 
     // post请求时需要设定Content-Type
     if(!json){
-        if (method === 'post'||method === 'put') {
+        if (method === 'post'||method === 'put'||method === 'delete') {
             config.headers['Content-Type'] = 'application/json;charset=UTF-8';
             config.data = param;
         } else if (method === 'get') {
@@ -96,7 +96,7 @@ function http(method, url, param,json,imgToken) {
         }
         
     }else{
-        if (method === 'post'||method === 'put') {
+        if (method === 'post'||method === 'put'||method === 'delete') {
             config.headers['Content-Type'] = 'application/json;charset=UTF-8';
             config.data = param;
         }

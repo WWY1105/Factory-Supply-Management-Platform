@@ -33,7 +33,7 @@
             line-height:32px;
             color: @redColor;
             text-decoration: underline;
-
+            cursor: pointer;
         }
         .eachPic{
             width: 100px;
@@ -61,6 +61,23 @@
         }
         .ant-upload.ant-upload-select-picture-card > .ant-upload{
             .pd(0,0,0,0)
+        }
+        .goodDetailBox{
+            .ant-upload.ant-upload-select-picture-card{
+                background: none;
+                border: none;
+            }
+            .upload-list-inline .ant-upload-list-item {
+                float: left;
+                width: 200px;
+                margin-right: 8px;
+              }
+              .upload-list-inline .ant-upload-animate-enter {
+                animation-name: uploadAnimateInlineIn;
+              }
+              .upload-list-inline .ant-upload-animate-leave {
+                animation-name: uploadAnimateInlineOut;
+              }
         }
     }
     

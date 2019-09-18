@@ -3,82 +3,46 @@ import './order_management.less'
 import {Row,Col,Button,Select,Table,message,Input} from 'antd'
 const { Column } = Table;
 const { Option } = Select;
-const columns = [
-    {
-      title: '订单ID',
-      dataIndex: 'orderId',
-      key: 'orderId',
-    },
-    {
-      title: '商品ID',
-      dataIndex: 'goodsId ',
-      key: 'goodsId ',
-    },{
-        title: '商品图片',
-        dataIndex: 'goodsCover',
-        key: 'goodsCover',
-      },
-    {
-      title: '商品名称',
-      dataIndex: 'goodsName ',
-      key: 'goodsName ',
-    },{
-        title: '数量',
-        dataIndex: 'goodsNum   ',
-        key: 'goodsNum   ',
-      },{
-        title: '状态',
-        dataIndex: 'orderStatus',
-        key: 'orderStatus',
-      },
-      {
-        title: '订单金额',
-        dataIndex: 'orderAmount  ',
-        key: 'orderAmount  ',
-      },
-      {
-        title: '收货地址',
-        dataIndex: 'address',
-        key: 'address',
-      },{
-        title: '备注',
-        dataIndex: 'remark',
-        key: 'remark',
-      },
-      {
-        title: '物流信息',
-        dataIndex: 'logisticsCompany',
-        key: 'logisticsCompany',
-      },
-      {
-        title: '下单时间',
-        dataIndex: 'submitTime',
-        key: 'submitTime'
-      },{
-        title: '其他',
-        dataIndex: 'other',
-        key: 'other'
-      }
-  ];
+
 class OrderManagement extends Component{
     constructor(){
         super()
         this.state={
-            dataSource:[],
+            orderList:[],
             pageSize:10,
-            pageNum:1
+            pageNum:1,
+            receiverPhone:'',
+            receiverName:'',
+            goodsId:'',
+            orderId:'',
+            orderStatus:''
         }
     }
     componentDidMount(){
       this.getOrdersList()
     }
+    // 双向数据绑定
+    handleChange=(e,name)=>{
+        let obj={};
+        obj[name]=e.target.value;
+        this.setState(obj)
+    }
+    
      // 获取列表
      getOrdersList=()=>{
-      console.log('执行了')
-      window.http('get','business/order/findBusinessGoodsOrders?pageSize='+this.state.pageSize+"&pageNum="+this.state.pageNum).then((res)=>{
+    console.log(this.state)
+      window.http('get','business/order/findBusinessGoodsOrders?pageSize='
+      +this.state.pageSize+
+      "&pageNum="+this.state.pageNum+
+      '&goodsId='+this.state.goodsId+
+      '&receiverPhone='+this.state.receiverPhone,
+      '&receiverName='+this.state.receiverName,
+      '&orderId='+this.state.orderId,
+      '&orderStatus='+this.state.orderStatus
+      ).then((res)=>{
           if(res.data.code=='10000'){
-              let dataSource=res.data.content.dataList;
-              this.setState({dataSource})
+              let orderList=res.data.content.dataList;
+              this.setState({orderList})
           }else{
               message.error(res.data.message);
           }
@@ -96,6 +60,7 @@ class OrderManagement extends Component{
                                 defaultValue="0"
                                 style={{ width: 200 }}
                                 optionFilterProp="children"
+                                onChange={(e)=>{this.handleChange(e,'orderStatus')}}
                             >
                                 <Option value="0">全部</Option>
                                 <Option value="1">是</Option>
@@ -110,27 +75,62 @@ class OrderManagement extends Component{
                     <Row type="flex" style={{marginTop:25}}>
                         <Col span={5}>
                             <p className="searchText">收件人性名</p>
-                            <Input type="text"/>
+                            <Input type="text"  onChange={(e)=>{this.handleChange(e,'receiverPhone')}}/>
                         </Col>
                         <Col span={5}>
                             <p className="searchText">收件人电话</p>
-                            <Input type="text"/>
+                            <Input type="text"  onChange={(e)=>{this.handleChange(e,'receiverName')}}/>
                         </Col>
                         <Col span={5}>
                             <p className="searchText">订单ID</p>
-                            <Input type="text"/>
+                            <Input type="text"  onChange={(e)=>{this.handleChange(e,'orderId')}}/>
                         </Col>
                         <Col span={5}>
                             <p className="searchText">商品ID</p>
-                            <Input type="text"/>
+                            <Input type="text"  onChange={(e)=>{this.handleChange(e,'goodsId')}}/>
                         </Col>
                         <Col span={4} className="textRight btnBox">
-                            <Button type="primary">查询</Button>
+                            <Button type="primary" onClick={()=>{this.getOrdersList()}}>查询</Button>
                         </Col>
                     </Row>
                 </div>
                  {/* 顶部搜索结束 */}
-                 <Table dataSource={this.state.dataSource} columns={columns} bordered pagination="bottom"/>;
+                 <Table dataSource={this.state.orderList}  bordered pagination="bottom">
+                    <Column align="center" title="订单ID" dataIndex="orderId" key="orderId" />
+                    <Column align="center" title="商品ID" dataIndex="goodsId" key="goodsId" />
+                    <Column align="center" title="商品主图" dataIndex="goodsImages" key="goodsImages" 
+                        render={goodsImages => (
+                            <div>
+                            {goodsImages?
+                                goodsImages.map((item,index) => (
+                                    <p style={{marginBottom:15}} key={index}><img  className="mainPic" src={this.props.imgUrl+item}/> </p>
+                                )):''}
+                          </div>
+                            
+                          )}
+                    />
+                     <Column align="center" title="商品名称" dataIndex="goodsName" key="goodsName" />
+                     <Column align="center" title="数量" dataIndex="goodsNum" key="goodsNum" />
+                     <Column align="center" title="状态" dataIndex="orderStatus" key="orderStatus" 
+                        render={orderStatus => (
+                            <span>
+                              {/* {goodsStatus=='1'?'上架':goodsStatus=='0'?'待上架':'下架'} */}
+                            </span>
+                          )}
+                    />
+                    <Column align="center" title="订单金额" dataIndex="orderAmount" key="orderAmount" />
+                    <Column align="center" title="收货地址" dataIndex="address" key="address" />
+                    <Column align="center" title="备注" dataIndex="remark" key="remark" />
+                    <Column align="center" title="物流信息" dataIndex="logisticsCompany" key="logisticsCompany" />
+                    <Column align="center" title="下单时间" dataIndex="submitTime" key="submitTime" />
+                    <Column align="center" title="备注" dataIndex="order" key="order" 
+                        render={orderStatus => (
+                            <span>
+                              <Button type="primary">详情</Button>
+                            </span>
+                          )}
+                    />
+                 </Table>
             </div>
         )
     }
