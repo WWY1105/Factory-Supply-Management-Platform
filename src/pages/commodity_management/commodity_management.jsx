@@ -3,74 +3,7 @@ import './commodity_management.less'
 import {Row,Col,Button,Select,Table,message,Icon} from 'antd'
 import {connect} from 'react-redux'
 const { Option } = Select;
-const { Column, ColumnGroup } = Table;
-const  columns=[
-    {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: '主图',
-      dataIndex: 'goodsCover',
-      key: 'goodsCover',
-    },
-    {
-      title: '商品名称',
-      dataIndex: 'goodsName',
-      key: 'goodsName',
-    },{
-        title: '单价',
-        dataIndex: 'goodsInventorys',
-        key: 'goodsInventorys'
-      },{
-        title: '库存',
-        dataIndex: 'inventoryNum',
-        key: 'inventoryNum',
-      },{
-        title: '单位',
-        dataIndex: 'unit',
-        key: 'unit',
-      },
-      {
-        title: '运费',
-        dataIndex: 'logisticsFee',
-        key: 'logisticsFee',
-      },
-      {
-        title: '发货时间',
-        dataIndex: 'address',
-        key: 'address',
-      },{
-        title: '大分类',
-        dataIndex: 'name',
-        key: 'name',
-      },
-      {
-        title: '小分类',
-        dataIndex: 'age',
-        key: 'age',
-      },
-      {
-        title: '上下架',
-        dataIndex: 'goodsStatus',
-        key: 'goodsStatus',
-      },{
-        title: '排序',
-        dataIndex: 'sort',
-        key: 'sort',
-      },
-      {
-        title: '删除',
-        dataIndex: 'delete',
-        key: 'delete',
-      },
-      {
-        title: '其他',
-        dataIndex: 'other',
-        key: 'other',
-      }
-  ];
+const { Column } = Table;
 class CommodityManagement extends Component{
     constructor(){
         super()

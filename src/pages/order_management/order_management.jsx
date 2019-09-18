@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import './order_management.less'
 import {Row,Col,Button,Select,Table,message,Input} from 'antd'
+const { Column } = Table;
 const { Option } = Select;
 const columns = [
     {
@@ -63,9 +64,26 @@ class OrderManagement extends Component{
     constructor(){
         super()
         this.state={
-            dataSource:[]
+            dataSource:[],
+            pageSize:10,
+            pageNum:1
         }
     }
+    componentDidMount(){
+      this.getOrdersList()
+    }
+     // 获取列表
+     getOrdersList=()=>{
+      console.log('执行了')
+      window.http('get','business/order/findBusinessGoodsOrders?pageSize='+this.state.pageSize+"&pageNum="+this.state.pageNum).then((res)=>{
+          if(res.data.code=='10000'){
+              let dataSource=res.data.content.dataList;
+              this.setState({dataSource})
+          }else{
+              message.error(res.data.message);
+          }
+      })
+  }
     render(){
         return (
             <div className="order_management_box">
