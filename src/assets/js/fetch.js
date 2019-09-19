@@ -16,7 +16,7 @@ const get=(url)=>{
         headers:{
             'Access-Control-Allow-Origin': '*',
             'Accept': 'application/json, text/plain, */*',
-            // access_token: "0ce502fb-8403-4050-9cc5-31d672c871d2"
+            // access_token: "bearer  0ce502fb-8403-4050-9cc5-31d672c871d2"
             //refresh_token: "72b78839-5ddc-43f3-896f-687a38873ed6"
             "Authorization":"Basic Y2xpZW50OnNlY3JldA=="
         },

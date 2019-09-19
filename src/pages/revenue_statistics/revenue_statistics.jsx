@@ -19,24 +19,33 @@ class RevenueStatistics extends Component{
     componentDidMount(){
         console.log(defaultYear,defaultMonth,defaultDay)
     }
+    changeMonthValue = (v,dateString) => {
+        this.setState({
+            year_value: v
+        });
+        console.log(dateString)
+      };
     // 年份选择器-----start
     setOpenState = () => {
         this.setState({
           open: !this.state.open
         });
       };
-    
-      changeValue = v => {
+      
+      changeYearValue = (v,dateString) => {
         this.setState({
             year_value: v
         });
+        console.log(dateString)
       };
     
-      changeRender = v => {
+      changeRender = (v,dateString) => {
         this.setState({
             year_value: v,
           open: false
         });
+       
+        console.log(this.state.year_value)
       };
        // 年份选择器-----end
     render(){
@@ -48,7 +57,7 @@ class RevenueStatistics extends Component{
             mode="year"
             format="YYYY"
             value={this.state.year_value}
-            onChange={this.changeValue}
+            onChange={this.changeYearValue}
             onPanelChange={this.changeRender}
             onOpenChange={this.setOpenState}
             open={open}
@@ -60,7 +69,7 @@ class RevenueStatistics extends Component{
             mode="year"
             format="YYYY"
             value={this.state.year_value}
-            onChange={this.changeValue}
+            onChange={this.changeYearValue}
             onPanelChange={this.changeRender}
             open={open}
             />
@@ -78,7 +87,7 @@ class RevenueStatistics extends Component{
                                 </Row>
                             </Col>
                             <Col span={24} className="smallTitle">
-                                <Row type="flex" justify="between">
+                                <Row type="flex" justify="space-between">
                                     <Col span={12} >
                                         <p className="midTitle">日订单数量</p>
                                         <p className="numTitle">600条</p>
@@ -96,11 +105,15 @@ class RevenueStatistics extends Component{
                             <Col span={24} className="textLeft smallTitle">月份</Col>
                             <Col span={24}>
                                 <Row type="flex" justify="center">
-                                    <MonthPicker defaultValue={moment(defaultYear+'/'+defaultMonth, monthFormat)} format={monthFormat} />
+                                    <MonthPicker 
+                                    defaultValue={moment(defaultYear+'/'+defaultMonth, monthFormat)} 
+                                    format={monthFormat} 
+                                    value={this.state.year_value}
+                                    onChange={this.changeValue}/>
                                 </Row>
                             </Col>
                             <Col span={24} className="smallTitle">
-                                <Row type="flex" justify="between">
+                                <Row type="flex" justify="space-between">
                                     <Col span={12} >
                                         <p className="midTitle">月订单数量</p>
                                         <p className="numTitle">600条</p>
@@ -120,7 +133,7 @@ class RevenueStatistics extends Component{
                                 <Row type="flex" justify="center">{YearPicker}</Row>
                             </Col>
                             <Col span={24} className="smallTitle">
-                                <Row type="flex" justify="between">
+                                <Row type="flex" justify="space-between">
                                     <Col span={12} >
                                         <p className="midTitle">年订单数量</p>
                                         <p className="numTitle">600条</p>

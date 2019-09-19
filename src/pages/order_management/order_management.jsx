@@ -31,14 +31,27 @@ class OrderManagement extends Component{
      // 获取列表
      getOrdersList=()=>{
     console.log(this.state)
-      window.http('get','business/order/findBusinessGoodsOrders?pageSize='
-      +this.state.pageSize+
-      "&pageNum="+this.state.pageNum+
-      '&goodsId='+this.state.goodsId+
-      '&receiverPhone='+this.state.receiverPhone,
-      '&receiverName='+this.state.receiverName,
-      '&orderId='+this.state.orderId,
-      '&orderStatus='+this.state.orderStatus
+      let postObj={
+        pageNum:this.state.pageNum,
+        pageSize:this.state.pageSize
+      };
+      if(this.state.goodsId){
+        postObj.goodsId=this.state.goodsId;
+      }
+      if(this.state.receiverPhone){
+        postObj.receiverPhone=this.state.receiverPhone;
+      }
+      if(this.state.receiverName){
+        postObj.receiverName=this.state.receiverName;
+      }
+      if(this.state.orderId){
+        postObj.orderId=this.state.orderId;
+      }
+      if(this.state.orderStatus){
+        postObj.orderStatus=this.state.orderStatus;
+      }
+
+      window.http('get','business/order/findBusinessGoodsOrders',postObj
       ).then((res)=>{
           if(res.data.code=='10000'){
               let orderList=res.data.content.dataList;
@@ -111,13 +124,7 @@ class OrderManagement extends Component{
                     />
                      <Column align="center" title="商品名称" dataIndex="goodsName" key="goodsName" />
                      <Column align="center" title="数量" dataIndex="goodsNum" key="goodsNum" />
-                     <Column align="center" title="状态" dataIndex="orderStatus" key="orderStatus" 
-                        render={orderStatus => (
-                            <span>
-                              {/* {goodsStatus=='1'?'上架':goodsStatus=='0'?'待上架':'下架'} */}
-                            </span>
-                          )}
-                    />
+                     <Column align="center" title="状态" dataIndex="orderStatusDesc" key="orderStatusDesc" />
                     <Column align="center" title="订单金额" dataIndex="orderAmount" key="orderAmount" />
                     <Column align="center" title="收货地址" dataIndex="address" key="address" />
                     <Column align="center" title="备注" dataIndex="remark" key="remark" />
