@@ -8,15 +8,16 @@ class ContactService extends Component{
         return (
             <div className="contact_service_box">
                 <Row>
-                    <Col span={12} className="textCenter">
+                    <Col span={12} className="textCenter flexBox">
                         <img src={imgURL1} alt=""/>
                         <p className="commonText">客服热线</p>
                         <p className="numText">3333333333</p>
                     </Col>
-                    <Col span={12} className="textCenter">
+                    <Col span={12} className="textCenter flexBox">
                         <img src={imgURL2} alt=""/>
                         <p className="commonText">微信客服</p>
                         <p className="numText">3333333333</p>
+                        <img src='' alt="" className="erImg"/>
                     </Col>
             
                 </Row>

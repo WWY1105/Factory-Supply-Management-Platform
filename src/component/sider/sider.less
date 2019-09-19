@@ -9,10 +9,11 @@
         .ant-menu-item{
             padding-left:0!important;
             padding-right:0!important;
-            .pd(0px,16px,0px,16px);
+            .pr(16);
+            .pl(16);
             height: @menuItemH;
             background: @siderBg;
-            font-size: @siderFontSize;
+             .fs(@siderFontSize);
             line-height:28px;
             &.topMenu{
                 margin: 15px 0;
@@ -32,10 +33,10 @@
                 border-right: 6px solid #16D0FF;
             }
             .iconfont{
-                font-size: @MenuIconSize;
+                .fs(@MenuIconSize);
                 color:@wc;
                 &.logoicon{
-                    font-size:@logoIconSize;
+                     .fs(@logoIconSize);
                 }
             }
     

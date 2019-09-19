@@ -11,7 +11,8 @@ class Factory_Information extends Component{
             factoryName:'',
             contactName:'',
             contactTel:'',
-            businessScope:''
+            businessScope:'',
+            balance:0
         }
     }
     componentDidMount(){
@@ -23,7 +24,7 @@ class Factory_Information extends Component{
         if(this.props.userId){
             window.http('get','business/user/findBusinessUser?userId='+this.props.userId).then((res)=>{
                 if(res.data.code=='10000'){
-
+                   
                 }else{
                     message.error(res.data.message);
                 }

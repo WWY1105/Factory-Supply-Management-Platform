@@ -15,7 +15,8 @@ class OrderManagement extends Component{
             receiverName:'',
             goodsId:'',
             orderId:'',
-            orderStatus:''
+            orderStatus:'',
+            total:0
         }
     }
     componentDidMount(){
@@ -55,13 +56,28 @@ class OrderManagement extends Component{
       ).then((res)=>{
           if(res.data.code=='10000'){
               let orderList=res.data.content.dataList;
-              this.setState({orderList})
+              this.setState({orderList,total:res.data.content.page.total})
           }else{
               message.error(res.data.message);
           }
       })
   }
+  // 分页改变
+  tableChange=(pagination)=>{
+    // console.log(pagination.current)
+    let pageNum=pagination.current;
+    this.setState({pageNum},()=>{
+        this.getOrdersList()
+    });
+    
+}
     render(){
+        let pagination={
+            defaultCurrent:1,
+            total:this.state.total,
+            pageSize:this.state.pageSize,
+           
+        }
         return (
             <div className="order_management_box">
                 <div className="searchBox">
@@ -108,7 +124,7 @@ class OrderManagement extends Component{
                     </Row>
                 </div>
                  {/* 顶部搜索结束 */}
-                 <Table dataSource={this.state.orderList}  bordered pagination="bottom">
+                 <Table dataSource={this.state.orderList}  bordered pagination="bottom" pagination={pagination}  onChange={this.tableChange}>
                     <Column align="center" title="订单ID" dataIndex="orderId" key="orderId" />
                     <Column align="center" title="商品ID" dataIndex="goodsId" key="goodsId" />
                     <Column align="center" title="商品主图" dataIndex="goodsImages" key="goodsImages" 

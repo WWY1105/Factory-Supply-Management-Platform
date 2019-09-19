@@ -14,7 +14,8 @@ class CommodityManagement extends Component{
             visible:false,
             deleteId:'',
             goodsStatus:'',
-            hasInventory:''
+            hasInventory:'',
+            total:0//分页数据总数
         }
     }
     hideModal=()=>{
@@ -69,11 +70,20 @@ class CommodityManagement extends Component{
         window.http('get','business/goods/findGoodses?pageSize='+this.state.pageSize+"&pageNum="+this.state.pageNum+"&goodsStatus="+this.state.goodsStatus+"&hasInventory="+this.state.hasInventory).then((res)=>{
             if(res.data.code=='10000'){
                 let dataSource=res.data.content.dataList;
-                this.setState({dataSource})
+                this.setState({dataSource,total:res.data.content.page.total})
             }else{
                 message.error(res.data.message);
             }
         })
+    }
+    // 分页改变
+    tableChange=(pagination)=>{
+        // console.log(pagination.current)
+        let pageNum=pagination.current;
+        this.setState({pageNum},()=>{
+            this.getGoodsList()
+        });
+        
     }
     // 搜索select改变
     goodsStatusChange=(selectedItems)=>{
@@ -86,6 +96,12 @@ class CommodityManagement extends Component{
         this.getGoodsList()
     }
     render(){
+        let pagination={
+            defaultCurrent:1,
+            total:this.state.total,
+            pageSize:this.state.pageSize,
+           
+        }
         return (
             <div className="commodity_management_box">
                 {/* 商品管理 */}
@@ -132,7 +148,7 @@ class CommodityManagement extends Component{
                     </Row>
                 </div> 
                 {/* 顶部搜索结束 */}
-                <Table dataSource={this.state.dataSource}  bordered pagination="bottom" size="small" rowKey={record=>record.id}>
+                <Table dataSource={this.state.dataSource}  bordered pagination="bottom" size="small" pagination={pagination}  onChange={this.tableChange} rowKey={record=>record.id}>
                     <Column align="center" title="ID" dataIndex="id" key="id" />
                     <Column align="center" title="主图" dataIndex="goodsImages" key="goodsImages" 
                         render={goodsImages => (

@@ -1,19 +1,24 @@
 @import "../../index.less";
 .revenue_statistics_box{
-    .pd(68px,0,0,0);
+    // .pd(68px,0,0,0);
+    .pt(68);
     .smallTitle{
-        font-size: @fs16;
+         .fs(@fs16);
         max-width: 302px;
-        .pd(0px,0,10px,0);
+        // .pd(0px,0,10px,0);
+        .pt(0);
+        .pr(0);
+        .pl(10);
+        .pb(0);
     }
     .midTitle{
         color: @contentTextColor;
         font-weight: 600;
         .margin(45px,0,38px,0);
-        font-size:@fs22;
+         .fs(@fs22);
     }
     .numTitle{
-        font-size:@fs22;
+         .fs(@fs22);
         color: @redColor;
     }
     .ant-calendar-picker-input.ant-input{

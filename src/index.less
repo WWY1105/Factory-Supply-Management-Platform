@@ -10,11 +10,12 @@
 @siderFontSize:14px;
 @commonTextSize:18px;
 @fs16:16px;
+@f13:13px;
 @fs22:22px;
 @wc:#fff;
 @bigTitleSize:35px;
 @zero:0;
-@MenuIconSize:26px;//菜单icon的大小
+@MenuIconSize:26;//菜单icon的大小
 @menuContentText:24px;
 @logoIconSize:29px;
 @menuItemH:80px;
@@ -73,9 +74,7 @@ p,span{
 .margin(@t,@r,@b,@l){
   margin:@t @r @b @l;
 }
-.pd(@t,@r,@b,@l){
-  padding: @t @r @b @l
-}
+
 // common
 @commonWText:{
   font-size:@commonTextSize;
@@ -133,3 +132,96 @@ p,span{
   text-decoration: underline;
   cursor: pointer;
 }
+
+
+ 
+@media screen and (max-width:769px) {
+ 
+  //css style
+   
+}
+   
+  //ipad pro && ipad mini 768px
+   
+  @media screen and  (min-width:768px) and (max-width: 960px) {
+   
+  //css style
+   
+  }
+  @media screen and (min-width: 1000px) {
+   
+    //css style
+    html{
+      font-size: 50px;
+    }
+     
+  }
+  .fs(@px) {
+    font-size: unit(@px / 54, rem);
+  }
+  
+  /*----- 宽度 -----*/
+  .w(@px) {
+    width: unit(@px / 54, rem);
+  }
+  
+  /*----- 高度 -----*/
+  .h(@px) {
+    height: unit(@px / 54, rem);
+  }
+  
+  /*----- 行高 -----*/
+  .lh(@px) {
+    line-height: unit(@px / 54, rem);
+  }
+  
+  /*----- 背景尺寸 -----*/
+  .b_s(@px, @px) {
+    -webkit-background-size: unit(@px / 54, rem) unit(@px / 54, rem);
+    background-size: unit(@px / 54, rem) unit(@px / 54, rem);
+  }
+  /**
+  * [背景尺寸，设置宽度，高度auto]
+   */
+  .b_s1(@px) {
+    -webkit-background-size: unit(@px / 54, rem) auto;
+    background-size: unit(@px / 54, rem) auto;
+  }
+  
+  .b_s2(@px) {
+    -webkit-background-size: auto unit(@px / 54, rem);
+    background-size: auto unit(@px / 54, rem);
+  }
+  
+  /*----- margin -----*/
+  .mt(@px) {
+    margin-top: unit(@px / 54, rem);
+  }
+  .mr(@px) {
+    margin-right: unit(@px / 54, rem);
+  }
+  .mb(@px) {
+    margin-bottom: unit(@px / 54, rem);
+  }
+  .ml(@px) {
+    margin-left: unit(@px / 54, rem);
+  }
+  /*----- padding -----*/
+  .pt(@px) {
+    padding-top: unit(@px / 54, rem);
+  }
+  .pr(@px) {
+    padding-right: unit(@px / 54, rem);
+  }
+  .pb(@px) {
+    padding-bottom: unit(@px / 54, rem);
+  }
+  .pl(@px) {
+    padding-left: unit(@px / 54, rem);
+  }
+  .pd(@t,@r,@b,@l){
+    padding-left: unit(@l / 54, rem);
+    padding-bottom: unit(@bgg / 54, rem);
+    padding-right: unit(@r / 54, rem);
+    padding-top: unit(@t / 54, rem);
+  }

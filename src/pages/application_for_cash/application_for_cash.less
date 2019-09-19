@@ -2,12 +2,15 @@
 
 .application_for_cash_box{
     .search_box{
-        .pd(32px,32px,32px,32px);
+            .pt(32);
+            .pr(32);
+            .pl(32);
+            .pb(32);
         .searchText{
             line-height: 30px;
         }
         .price{
-            font-size: @fs22;
+             .fs(@fs22);
             color: @redColor;
             .margin(0,0,0,30px)
         }
@@ -19,12 +22,17 @@
         }
     }
     .midTitle{
-        .pd(60px,0,35px,0);
+        // .pd(60px,0,35px,0);
+        .pt(60);
+        .pb(35);
         background: @f6;
         color: @commonFontColor;
-        font-size: @menuContentText;
+         .fs(@menuContentText);
     }
     .tableBox{
-        .pd(32px,32px,32px,32px);
+        .pt(32);
+        .pr(32);
+        .pl(32);
+        .pb(32);
     }
 }
