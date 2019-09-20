@@ -135,7 +135,7 @@ class ApplicationForCash extends Component{
                     <Column align="center" title="审核日期" dataIndex="auditTime" key="auditTime" />
                     <Column align="center" title="金额" dataIndex="amount" key="amount" />
                     <Column align="center" title="提现类型" dataIndex="transferType" key="transferType" />
-                    <Column align="center" title="提现账户" dataIndex="goodsNum" key="goodsNum" />
+                    <Column align="center" title="提现账户" dataIndex="alipayAccount" key="alipayAccount" />
                     <Column align="center" title="状态" dataIndex="transferStatus" key="transferStatus" render={
                         (transferStatus)=>{
                             // 提现状态(0:待审核,1:审核通过,2:审核驳回) ,
