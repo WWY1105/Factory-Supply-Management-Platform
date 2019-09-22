@@ -11,8 +11,7 @@ class Factory_Information extends Component{
             factoryName:'',
             contactName:'',
             contactTel:'',
-            businessScope:'',
-            balance:0
+            businessScope:''
         }
     }
     componentDidMount(){
@@ -24,7 +23,15 @@ class Factory_Information extends Component{
         if(this.props.userId){
             window.http('get','business/user/findBusinessUser?userId='+this.props.userId).then((res)=>{
                 if(res.data.code=='10000'){
-                   
+                //    const {factoryName,
+                //    contactName,
+                //    contactTel,
+                //    businessScope}=res.data.connent;
+                //    this.setState({factoryName,
+                //     contactName,
+                //     contactTel,
+                //     businessScope})
+                    console.log(res.data.content)
                 }else{
                     message.error(res.data.message);
                 }
@@ -94,7 +101,7 @@ class Factory_Information extends Component{
         return (
             <div className="factory_Information_Box">
                 <Row  justify="center" align="top"  type="flex" >
-                    <Col span={24} >
+                    <Col span={14} offset={10}>
                          <p className="mianTitle">工厂信息</p>    
                     </Col>       
                 </Row>
