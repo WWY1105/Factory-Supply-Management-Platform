@@ -8,6 +8,7 @@ import ApplicationForCash from '../../pages/application_for_cash/application_for
 import ContactService from '../../pages/contact_service/contact_service'
 import FactoryInformation from '../../pages/factory_Information/factory_Information'
 import OrderManagement from '../../pages/order_management/order_management'
+import OrderDetail from '../../pages/order_detail/order_detail'
 import RevenueStatistics from '../../pages/revenue_statistics/revenue_statistics'
 import GoodsEdit from '../../pages/goods_edit/goods_edit'
 // import PropTypes from 'prop-types'; 
@@ -60,6 +61,7 @@ class Index extends Component {
                                                     <Route exact path='/index/commodity_management' component={CommodityManagement}/>
                                                     <Route exact path='/index/application_for_cash' component={ApplicationForCash}/>
                                                     <Route exact path='/index/order_management' component={OrderManagement}/>
+                                                    <Route exact path='/index/order_detail' component={OrderDetail}/>
                                                     <Route exact path='/index/revenue_statistics' component={RevenueStatistics}/>
                                                     <Route exact path='/index/goods_edit' component={GoodsEdit}/>
                                                 </Switch>

@@ -2,6 +2,14 @@
 
 import {combineReducers} from 'redux'
 import defaultState from './state'
+// 获取工厂信息的reducer
+function factoryInfo(state=defaultState.factoryInfo,action){
+    switch(action.type){
+        case 'GET_FACTORY_INFO':
+            return action.data
+        default:return state
+    }
+}
 // 左边菜单改变
 function leftNav(state=defaultState.leftNav,action){
     switch(action.type){
@@ -62,5 +70,5 @@ function pageTitle (state = defaultState.pageTitle, action) {
     }
   }
 export default combineReducers({
-    pageTitle,imgUrl,baseUrl,leftNav,userId
+    pageTitle,imgUrl,baseUrl,leftNav,userId,factoryInfo
 })

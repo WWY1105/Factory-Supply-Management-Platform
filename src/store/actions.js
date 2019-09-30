@@ -22,9 +22,24 @@ function setUserId(data){
     dispatch({type:'SET_USER_OBJ',data})
   }
 }
+// 获取工厂信息+this.props.userId
+function getFactoryInfo(){
+  return (dispatch)=>{
+
+    window.http('get','business/user/findBusinessUser?userId=13').then((res)=>{
+      if(res.data.code=='10000'){
+         dispatch({type:'GET_FACTORY_INFO',data:res.data.content})
+          //  console.log(res.data.content)
+      }else{
+          // message.error(res.data.message);
+      }
+  })
+  }
+}
 
   export{
     setLeftNav,
     setPageTitle,
-    setUserId
+    setUserId,
+    getFactoryInfo
   }

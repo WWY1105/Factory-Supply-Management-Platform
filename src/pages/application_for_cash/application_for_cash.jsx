@@ -131,10 +131,22 @@ class ApplicationForCash extends Component{
                  <p className="midTitle">提现记录</p>
                <div className="tableBox">
                 <Table dataSource={this.state.dataSource} bordered pagination={pagination}  onChange={this.tableChange}>
-                    <Column align="center" title="申请日期" dataIndex="createTime" key="createTime" />
-                    <Column align="center" title="审核日期" dataIndex="auditTime" key="auditTime" />
+                    <Column align="center" title="申请日期" dataIndex="applyTime" key="applyTime"  render={
+                        (applyTime)=>{
+                            return (
+                               <span> {new Date(applyTime).getFullYear() + '-' + (new Date(applyTime).getMonth() + 1) + '-' + new Date(applyTime).getDate() + ' ' + new Date(applyTime).getHours() + ':' + new Date(applyTime).getMinutes() + ':' + new Date(applyTime).getSeconds()}</span>
+                            )
+                        }
+                     } />
+                    <Column align="center" title="审核日期" dataIndex="auditTime" key="auditTime" render={
+                        (auditTime)=>{
+                            return (
+                               <span> {auditTime?new Date(auditTime).getFullYear() + '-' + (new Date(auditTime).getMonth() + 1) + '-' + new Date(auditTime).getDate() + ' ' + new Date(auditTime).getHours() + ':' + new Date(auditTime).getMinutes() + ':' + new Date(auditTime).getSeconds():''}</span>
+                            )
+                        }
+                     } />
                     <Column align="center" title="金额" dataIndex="amount" key="amount" />
-                    <Column align="center" title="提现类型" dataIndex="transferType" key="transferType" />
+                    <Column align="center" title="提现类型" dataIndex="transferTypeDesc" key="transferTypeDesc" />
                     <Column align="center" title="提现账户" dataIndex="alipayAccount" key="alipayAccount" />
                     <Column align="center" title="状态" dataIndex="transferStatus" key="transferStatus" render={
                         (transferStatus)=>{
