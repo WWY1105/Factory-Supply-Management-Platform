@@ -25,8 +25,12 @@ class OrderManagement extends Component{
     // 双向数据绑定
     handleChange=(e,name)=>{
         let obj={};
-        obj[name]=e.target.value;
-        this.setState(obj)
+        if(e.target){
+            obj[name]=e.target.value;
+            this.setState(obj)
+        }
+        console.log(e.target.value)
+       
     }
     
      // 获取列表
@@ -63,14 +67,26 @@ class OrderManagement extends Component{
       })
   }
   // 分页改变
-  tableChange=(pagination)=>{
-    // console.log(pagination.current)
-    let pageNum=pagination.current;
-    this.setState({pageNum},()=>{
-        this.getOrdersList()
-    });
-    
-}
+    tableChange=(pagination)=>{
+        // console.log(pagination.current)
+        let pageNum=pagination.current;
+        this.setState({pageNum},()=>{
+            this.getOrdersList()
+        });
+        
+    }
+    toOrderDetail=(orderId)=>{
+        console.log(orderId)
+        this.props.history.push({
+            pathname:'/index/order_detail',
+            state:{
+                orderId:orderId
+            }
+        })
+    }
+    orderStatusChange=(selectedItems)=>{
+        this.setState({orderStatus:selectedItems})
+    }
     render(){
         let pagination={
             defaultCurrent:1,
@@ -86,14 +102,24 @@ class OrderManagement extends Component{
                             <p className="searchText">订单状态</p>
                             <Select
                                 showSearch
-                                defaultValue="0"
+                                defaultValue=""
                                 style={{ width: 200 }}
                                 optionFilterProp="children"
-                                onChange={(e)=>{this.handleChange(e,'orderStatus')}}
+                                onChange={this.orderStatusChange}
                             >
-                                <Option value="0">全部</Option>
-                                <Option value="1">是</Option>
-                                <Option value="2">否</Option>
+                                     <Option value="">全部</Option>
+                                     <Option value='1'>待发货</Option>
+                                     <Option value='5'>仅退款</Option>
+                                     <Option value='3'>已发货</Option>
+                                     <Option value='8'>退货退款</Option>
+                                     <Option value='0'>待支付</Option>
+                                     <Option value='6'>退款完成</Option>
+                                     <Option value='7'>订单超时关闭</Option>
+                                     <Option value='9'>退款退货完成</Option>
+                                     <Option value='10'>退款驳回</Option>
+                                     <Option value='11'>退款退货驳回</Option>
+                                     <Option value='13'>已完成</Option>
+                                     <Option value='14'>申请保修</Option>
                             </Select>
                         </Col>
                         <Col span={12} className="textRight btnBox">
@@ -124,7 +150,8 @@ class OrderManagement extends Component{
                     </Row>
                 </div>
                  {/* 顶部搜索结束 */}
-                 <Table dataSource={this.state.orderList}  bordered pagination="bottom" pagination={pagination}  onChange={this.tableChange}>
+                 <Table dataSource={this.state.orderList}  bordered pagination="bottom" pagination={pagination}  onChange={this.tableChange}
+                >
                     <Column align="center" title="订单ID" dataIndex="orderId" key="orderId" />
                     <Column align="center" title="商品ID" dataIndex="goodsId" key="goodsId" />
                     <Column align="center" title="商品主图" dataIndex="goodsImages" key="goodsImages" 
@@ -139,17 +166,53 @@ class OrderManagement extends Component{
                           )}
                     />
                      <Column align="center" title="商品名称" dataIndex="goodsName" key="goodsName" />
-                     <Column align="center" title="数量" dataIndex="goodsNum" key="goodsNum" />
-                     <Column align="center" title="状态" dataIndex="orderStatusDesc" key="orderStatusDesc" />
+                     <Column align="center" title="数量" dataIndex="goodsNum" key="goodsNum"  render={
+                         (goodsNum)=>(
+                            <p className="blueText"><span>{goodsNum}</span>件</p>
+                         )
+                     }/>
+                     <Column align="center" title="状态" dataIndex="orderStatus" key="orderStatus" render={
+                          orderStatus=>(
+                            <div>
+                               {
+                                    orderStatus=='1'?(<div><p className="redText">待发货</p></div>):
+                                    orderStatus=='5'?(<div><p className="redText">仅退款</p></div>):
+                                    orderStatus=='3'?(<div><p>已发货</p></div>):
+                                    orderStatus=='8'?(<div><p className="redText">退货退款</p></div>):
+                                    orderStatus=='0'?(<div><p>待支付</p></div>):
+                                    orderStatus=='6'?(<div><p>退款完成</p></div>):
+                                    orderStatus=='7'?(<div><p>订单超时关闭</p></div>):
+                                    orderStatus=='9'?(<div><p>退款退货完成</p></div>):
+                                    orderStatus=='10'?(<div><p>退款驳回</p></div>):
+                                    orderStatus=='11'?(<div><p>退款退货驳回</p></div>):
+                                    orderStatus=='13'?(<div><p>已完成</p></div>):
+                                    orderStatus=='14'?(<div><p className="redText">申请保修</p></div>):""
+                               }
+                           
+                            </div>
+                        )
+                     }/>
                     <Column align="center" title="订单金额" dataIndex="orderAmount" key="orderAmount" />
-                    <Column align="center" title="收货地址" dataIndex="address" key="address" />
-                    <Column align="center" title="备注" dataIndex="remark" key="remark" />
+                    <Column align="center" title="收货地址" dataIndex="address" key="address" render={
+                       (text, record, index)=>(
+                            <div>
+                                <p>{record.receiverName},{record.receiverPhone}</p>
+                                <p>{record.provinceName},{record.cityName},{record.areaName}</p>
+                                <p>{record.address}</p>
+                            </div>
+                        )
+                    }/>
+                    <Column align="center" title="备注" dataIndex="remark" key="remark" render={
+                        (remark)=>(
+                            <span className="text-danger redText">{remark}</span>
+                        )
+                    }/>
                     <Column align="center" title="物流信息" dataIndex="logisticsCompany" key="logisticsCompany" />
                     <Column align="center" title="下单时间" dataIndex="submitTime" key="submitTime" />
-                    <Column align="center" title="备注" dataIndex="order" key="order" 
-                        render={orderStatus => (
+                    <Column align="center" title="其他" dataIndex="orderId" key="order" 
+                        render={orderId => (
                             <span>
-                              <Button type="primary">详情</Button>
+                              <Button type="primary" onClick={()=>{this.toOrderDetail(orderId)}}>详情</Button>
                             </span>
                           )}
                     />

@@ -197,7 +197,7 @@ class CommodityManagement extends Component{
                             <span>
                               {goodsCategorys?
                               goodsCategorys.map((item,index) => (
-                                <p key={index}>{item.level=='1'?item.categoryName:''}</p>
+                                <p key={index}>{item.categoryName}</p>
                               )):''}
                             </span>
                           )}
@@ -206,9 +206,11 @@ class CommodityManagement extends Component{
                         render={goodsCategorys => (
                             <span>
                               {goodsCategorys?
-                              goodsCategorys.map((item,index) => (
-                                <p key={index}>{item.level=='2'?item.categoryName:''}</p>
-                              )):''}
+                              goodsCategorys.map((item,index) => 
+                              (
+                                <p key={index}>{item.secondGoodsCategory?item.secondGoodsCategory.categoryName:''}</p>
+                              )):''
+                              }
                             </span>
                           )}
                     />

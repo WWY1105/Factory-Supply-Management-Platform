@@ -6,14 +6,24 @@ const commonObj =  {
 // baseUrl:"http://www.shuimujiajia.net/works/",
 
     checkPhone:(val)=>{
-        var isMobilePhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
-        var isFixMob= /^0?1[3|4|5|8][0-9]\d{8}$/;
-        if(isFixMob.test(val)||isMobilePhone.test(val)){
-        return true;
+        // var isMobilePhone = /^([0-9]{3,4}-)?[0-9]{7,8}$/;
+        // var isFixMob= /^0?1[3|4|5|8][0-9]\d{8}$/;
+        // if(isFixMob.test(val)||isMobilePhone.test(val)){
+        // return true;
+        // }
+        // else{
+        // return false;
+        // }
+      
+        var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
+        if (!myreg.test(val)) {
+          console.log(1)
+            return false;
+        } else {
+          console.log(2)
+            return true;
         }
-        else{
-        return false;
-        }
+        
         
     },
      getBase64:(img, callback)=> {

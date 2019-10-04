@@ -2,8 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.less';
 import './assets/css/iconfont.css';
-import Index from './pages/index/index'
+import Indexpage from './pages/index/index'
 import Login from './pages/login/login'
+import Register from './pages/register/register'
+import ForgetPass from './pages/forgetPass/forgetPass'
+
 import CommodityManagement from './pages/commodity_management/commodity_management'
 import ApplicationForCash from './pages/application_for_cash/application_for_cash'
 import ContactService from './pages/contact_service/contact_service'
@@ -12,7 +15,7 @@ import OrderManagement from './pages/order_management/order_management'
 import RevenueStatistics from './pages/revenue_statistics/revenue_statistics'
 import { Provider } from 'react-redux'
 import * as serviceWorker from './serviceWorker'; 
-import { BrowserRouter,Route ,Switch} from 'react-router-dom'
+import { HashRouter,Route ,Switch} from 'react-router-dom'
 
 import store from './store/index';
 import './assets/js/fetch.js'
@@ -31,16 +34,19 @@ const {Footer,Sider,Content,Header}=Layout;
 ReactDOM.render(
     (
     <Provider store={store}>
-        <BrowserRouter >
+    {/* /opt/gpyz/business */}
+        <HashRouter basename='/business'>
             <Switch>
-                <Route path='/index' component={Index}>
-                   
-                                              
-                                            
+                <Route path='/' exact component={Login}/>
+                <Route path='/index' component={Indexpage}>           
                 </Route>
-                <Route path='/login' exact component={Login}/>
+                <Route path='/forgetPass' component={ForgetPass}>           
+                </Route>
+                <Route path='/register' component={Register}>           
+                </Route>
+               
             </Switch>
-        </BrowserRouter>
+        </HashRouter>
     </Provider>
         
        

@@ -94,7 +94,7 @@ class ApplicationForCash extends Component{
                 <div className="search_box">
                     <p className="title">
                         <span className="searchText">账户余额:</span>
-                        <span className="price">￥{this.state.balance}</span>
+                        <span className="price">￥{this.state.balance?this.state.balance:0}</span>
                     </p>
                     <div className="search">
                         <Row type="flex" gutter={30}>
@@ -108,7 +108,7 @@ class ApplicationForCash extends Component{
                                     onChange={(e)=>{this.handleChange(e,'factoryName')}}
                                 >
                                     <Option value="0">支付宝</Option>
-                                    <Option value="1">微信</Option>
+                                    {/* <Option value="1">微信</Option> */}
                                 </Select>
                             </Col>
                             <Col span={5}>
@@ -119,7 +119,11 @@ class ApplicationForCash extends Component{
                                 <p className="searchText">提现账户</p>
                                 <Input type="text"  onChange={(e)=>{this.handleChange(e,'alipayAccount')}}/>
                             </Col>
-                            <Col span={5} className="textRight btnBox">
+                            <Col span={5}>
+                                <p className="searchText">提现金额</p>
+                                <Input type="number"  onChange={(e)=>{this.handleChange(e,'amount')}}/>
+                            </Col>
+                            <Col span={4} className="textRight btnBox">
                                 <Button type="primary" style={{marginLeft:30}} onClick={()=>{this.submitApply()}}>提交申请</Button>
                             </Col>
                         </Row>

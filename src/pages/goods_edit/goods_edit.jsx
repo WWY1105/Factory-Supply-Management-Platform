@@ -1,10 +1,12 @@
 import React,{Component} from 'react'
 import './goods_edit.less'
-import {Row,Col,Button,Select,Input,Upload,message,Icon} from 'antd'
+import {Row,Col,Button,Select,Input,Upload,message,Icon,Modal} from 'antd'
+import {connect} from 'react-redux'
 import E from 'wangeditor'
 // import * as qiniu from 'qiniu-js'
 // import commonObj from '../../assets/js/common'
-import {connect} from 'react-redux'
+const { confirm } = Modal;
+
 let editor;
 let hashArr=[] ;
 let goodDetailhashArr=[]
@@ -18,8 +20,13 @@ class GoodsEdit extends Component{
             data:{},// 上传控件的token
             //goodsImage:'',// 商品的图片路径
             uptoken:'',
-            bigCategoryList:[],// 一级分类列表
-            smallCategoryList:[],
+            bigCategoryList0:[],// 一级分类列表
+            bigCategoryList1:[],
+            bigCategoryList2:[],
+            // smallCategoryList:[],
+            smallCategoryList0:[],
+            smallCategoryList1:[],
+            smallCategoryList2:[],
             marketPrice:"",//单价
             previewVisible: false,
             // 传的图片
@@ -76,11 +83,13 @@ class GoodsEdit extends Component{
         let chooseBigList=[];
         let chooseSmallList=[];
         this.props.history.location.state.filterGood.goodsCategorys.map((i,j)=>{
-            if(i.level==1){
-                chooseBigList.push(i.categoryId)
-            }else{
-                chooseSmallList.push(i.categoryId)
-            }
+                chooseBigList.push(i.categoryId);
+                if(i.secondGoodsCategory){
+                    chooseSmallList.push(i.secondGoodsCategory.categoryId)
+                }else{
+                    chooseSmallList.push('')
+                }
+                
         })
         // 选中的大分类-------end;
          // 主图----start
@@ -100,14 +109,41 @@ class GoodsEdit extends Component{
              fileList.push(obj)
          })
          newFileList1.map((i,j)=>{
-            let obj={
-               name:j,
-               uid:'-'+(j+1),
-               status:'done',
-               url: this.props.imgUrl + i
-            }
-            fileList1.push(obj)
+             if(i){
+                let obj={
+                    name:j,
+                    uid:'-'+(j+1),
+                    status:'done',
+                    url: this.props.imgUrl + i
+                 }
+                 fileList1.push(obj)
+             }
+            
         })
+        // 循环一级分类，获取二级分类
+        let promiseAll=[]
+        chooseBigList.forEach((i,j)=>{
+            promiseAll.push(this.getSmallCategory(i,j));
+        })
+        Promise.all(promiseAll).then((val)=>{
+            console.log('根据大分类获取的小分类')
+            console.log(val)
+           
+            val.forEach((i,index)=>{
+                let obj={};
+                obj['smallCategoryList'+index]=i;
+                this.setState(obj,()=>{
+                    console.log('errorerrorerrorerrorerrorerrorerrorerrorerrorerror')
+                    console.log(chooseBigList)
+                    console.log(chooseSmallList)
+                    console.log('smallCategoryList'+index)
+                    console.log(this.state['smallCategoryList'+index])
+                });
+            })
+        }).catch((error) => {
+            console.log(error)
+         })
+          // 循环一级分类，获取二级分类---end
         this.setState({chooseBigList,chooseSmallList,fileList1,fileList,filterGood:this.props.history.location.state.filterGood});
       
     }
@@ -115,72 +151,134 @@ class GoodsEdit extends Component{
         this.getToken()
        
     }
-    shouldComponentUpdate(){
-        console.log('000000000000000000000000')
-        console.log(this.state.filterGood);
-        return true;
+    shouldComponentUpdate(nextProps,nextState){
+        let flag=true;
+        if (this.state.smallCategoryList0 !== nextState.smallCategoryList0){
+            flag= true;
+        }
+        return flag;
     }
     // --------------------------------------
     // 获取一级分类
     getBigCategory=()=>{
         window.http('get','business/category/findFistGradeCategories').then((res)=>{
             if(res.data.code=='10000'){
-                this.setState({bigCategoryList:res.data.content});
-                if(res.data.content.length>0){
-                    // this.getSmallCategory(res.data.content[0].id)
-                }
-                // console.log(this.state.bigCategoryList)
+                let result=res.data.content;
+                this.setState({ 
+                    bigCategoryList0:result,// 一级分类列表
+                    bigCategoryList1:result,
+                    bigCategoryList2:result});
+
+               
             }else{
                 message.error(res.data.message);
             }
         })
     }
-    // 获取二级分类
-    getSmallCategory=(id)=>{
+    //一级分类改变， 获取二级分类id,index,a
+    getSmallCategory=(...arg)=>{
         let originFilterGood=this.state.filterGood;
-        console.log(id)
-        // let goodsCategorys=originFilterGood.goodsCategorys;
+        let id=arg[0];
+        let index=Number(arg[2])
+        console.log(arg)
+        
+        console.log('id'+id)
+        console.log("index"+index)
+        console.log('chooseBigList')
+        console.log(this.state.chooseBigList)
+        console.log(originFilterGood.goodsCategorys)
+       
         let obj={}
         obj.categoryId=id;
         obj.level='1';
-        originFilterGood.goodsCategorys.push(obj)
-        window.http('get','business/category/'+id+'/findCategories').then((res)=>{
-            if(res.data.code=='10000'){
-                this.setState({smallCategoryList:res.data.content});
-            }else{
-                message.error(res.data.message);
+       
+        if(originFilterGood.goodsCategorys[index]){
+             console.log('已存在，为修改')
+            if(id!=originFilterGood.goodsCategorys[index].categoryId){
+                console.log('选择项与原来不一样')
+                if(originFilterGood.goodsCategorys[index].id){
+                    obj.id=originFilterGood.goodsCategorys[index].id;
+                }
+                if(originFilterGood.goodsCategorys[index].secondGoodsCategory){
+                    
+                    let id=originFilterGood.goodsCategorys[index].secondGoodsCategory.id;
+                   
+                    obj.secondGoodsCategory={};
+                    obj.secondGoodsCategory.id=id;
+                    console.log('哈哈哈哈哈'+id)
+                    
+                }
+                originFilterGood.goodsCategorys[index]=obj;
+                console.log(originFilterGood.goodsCategorys[index])
+                let chooseSmallList=this.state.chooseSmallList;
+                chooseSmallList.splice(index,1,'');
+                this.setState({chooseSmallList})
             }
+        }else{
+            console.log('为存在，是添加')
+            originFilterGood.goodsCategorys.push(obj)
+        }
+        
+        let pp=new Promise((resolve,reject)=>{
+            window.http('get','business/category/'+id+'/findCategories').then((res)=>{
+                if(res.data.code=='10000'){
+                    resolve(res.data.content)
+                    
+                }else{
+                    reject('error')
+                    message.error(res.data.message);
+                }
+            })
         })
+        pp.then((value)=>{
+            let obj1={};
+            obj1['smallCategoryList'+index]=value;
+            console.log('执行了')
+            console.log(obj1)
+            this.setState(obj1);
+        })
+      
         this.setState({filterGood:originFilterGood})
-        this.categoryChange() 
+        this.chooseBigListChange(id,index) 
+        return pp;
        
     }
-    categoryChange=()=>{
-        let chooseBigList=[]
-        let chooseSmallList=[]
-        this.state.filterGood.goodsCategorys.map((i,j)=>{
-            if(i.level==1){
-                chooseBigList.push(i.categoryId)
-            }else{
-                chooseSmallList.push(i.categoryId)
-            }
-        })
-        this.setState({chooseBigList,chooseSmallList})
+    chooseSmallListChange=(id,index)=>{
+        let chooseSmallList=this.state.chooseSmallList;
+        chooseSmallList.splice(index,1,id);
+        this.setState({chooseSmallList})
+    }
+    chooseBigListChange=(id,index)=>{
+        let chooseBigList=this.state.chooseBigList;
+        chooseBigList.splice(index,1,id);
+        this.setState({chooseBigList})
     }
     // 二级分类改变
-    smallCategoryChange=(id)=>{
+    smallCategoryChange=(...arg)=>{
         let originFilterGood=this.state.filterGood;
         //  let goodsCategorys=this.state.goodsCategorys;
-        let obj={
-                categoryId: 0, 
-                level: 0
-        }
+        let id=arg[0];
+        let index=Number(arg[2])
+        let obj={}
         obj.categoryId=id;
         obj.level='2';
-        originFilterGood.goodsCategorys.push(obj);
-        this.setState({filterGood:originFilterGood})
-        console.log(this.state.filterGood)
-        this.categoryChange() 
+        console.log(id)
+        console.log(index)
+        console.log(originFilterGood.goodsCategorys)
+        if(originFilterGood.goodsCategorys[index].secondGoodsCategory){
+            console.log('已经有了子类')
+            console.log(originFilterGood.goodsCategorys[index].secondGoodsCategory)
+
+            if(id!=originFilterGood.goodsCategorys[index].secondGoodsCategory.categoryId){
+                 obj.id=originFilterGood.goodsCategorys[index].secondGoodsCategory.id;// 记录的id
+                 console.log(obj)
+                originFilterGood.goodsCategorys[index].secondGoodsCategory=obj;
+            }
+        }else if(originFilterGood.goodsCategorys[index]){
+            // alert(1)
+            originFilterGood.goodsCategorys[index].secondGoodsCategory=obj;
+        }
+        this.chooseSmallListChange(id,index) 
     }
     // 获取上传图片的token
     getToken=()=>{
@@ -215,11 +313,23 @@ class GoodsEdit extends Component{
     }
     // 删除规格
     delete_goodsInventorys=(index)=>{
-        // console.log('点击')
-        // console.log(index)
-        let originFilterGood=this.state.filterGood;
-        originFilterGood.goodsInventorys.splice(index,1)
-        this.setState({filterGood:originFilterGood})
+       
+            let originFilterGood=this.state.filterGood;
+            originFilterGood.goodsInventorys.splice(index,1)
+            this.setState({filterGood:originFilterGood})
+          
+       
+    }
+    confirm_delete=(index)=>{
+        let that=this;
+        confirm({
+            title: '提示',
+            content: '是否删除？',
+            onOk() {
+                that.delete_goodsInventorys(index)
+            },
+            onCancel() {},
+          });
     }
     beforeUpload=(j)=>{
        this.setState({currentPicIndex:j})
@@ -258,7 +368,7 @@ class GoodsEdit extends Component{
   }
     // 点击大保存
     save_data=()=>{
-        // console.log('--------------------')
+        
         // console.log(this.state.filterGood);
         let newHashArr;
         let newGoodDetailhashArr;
@@ -281,10 +391,39 @@ class GoodsEdit extends Component{
             })
             originFilterGood.detail=newGoodDetailhashArr.join(',');
         }
+        // 分类处理
+        console.log('分类处理')
+        console.log(originFilterGood.goodsCategorys)
+        let goodsCategorys=[];
+        originFilterGood.goodsCategorys.forEach((item)=>{
+            if(item.categoryId){
+                // 一级分类
+                let obj={};
+                obj.categoryId=item.categoryId;
+                obj.level='1';
+                if(item.id){
+                    obj.id=item.id;
+                }
+                goodsCategorys.push(obj)
+                if(item.secondGoodsCategory){
+                    let obj2={}
+                    obj2.categoryId=item.secondGoodsCategory.categoryId;
+                    obj2.level='2';
+                    obj2.id=item.secondGoodsCategory.id;
+                    if(item.secondGoodsCategory.id){
+                        obj2.id=item.secondGoodsCategory.id;
+                    }
+                    goodsCategorys.push(obj2)
+                }
+            }
+        })
+        originFilterGood.goodsCategorys=goodsCategorys;
         this.setState({filterGood:originFilterGood})
         let post_data=this.state.filterGood;
-        console.log(this.state.filterGood);
-        return false;
+          console.log('--------------------')
+         console.log(post_data);
+         console.log(post_data);
+        //  return false;
         let url;
         if(post_data.id){
             // 修改
@@ -295,9 +434,11 @@ class GoodsEdit extends Component{
         }
         window.http('post',url,post_data,true)
         .then((res)=>{
-            alert(1)
             if(res.data.code=='10000'){
-                message.success('保存成功')
+                message.success('保存成功');
+                this.props.history.push({
+                    pathname:'/index/commodity_management'
+                })
             }else{
                 message.error(res.data.message);
             }
@@ -346,10 +487,12 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.getSmallCategory}
+                            onChange={(...arg)=>{
+                                this.getSmallCategory(...arg,'0')
+                            }}
                             >
                                 {
-                                this.state.bigCategoryList.map((bigItem,bigIndex)=>{
+                                this.state.bigCategoryList0.map((bigItem,bigIndex)=>{
                                     return (
                                         <Option key={bigIndex} value={bigItem.id}>{bigItem.name}</Option>
                                     )
@@ -365,10 +508,10 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.smallCategoryChange}
+                            onChange={(...arg)=>{this.smallCategoryChange(...arg,'0')}}
                             >
                                 {
-                                this.state.smallCategoryList.map((bigItem,bigIndex)=>{
+                                this.state.smallCategoryList0.map((bigItem,bigIndex)=>{
                                     return (
                                         <Option key={bigIndex} value={bigItem.id}>{bigItem.name}</Option>
                                     )
@@ -389,10 +532,12 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                             onChange={this.getSmallCategory}
+                            onChange={(...arg)=>{
+                                this.getSmallCategory(...arg,'1')
+                            }}
                             >
                                 {
-                                this.state.bigCategoryList.map((bigItem,bigIndex)=>{
+                                this.state.bigCategoryList1.map((bigItem,bigIndex)=>{
                                     return (
                                         <Option key={bigIndex} value={bigItem.id}>{bigItem.name}</Option>
                                     )
@@ -408,10 +553,10 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.smallCategoryChange}
+                            onChange={(...arg)=>{this.smallCategoryChange(...arg,'1')}}
                             >
                                 {
-                                this.state.smallCategoryList.map((bigItem,bigIndex)=>{
+                                this.state.smallCategoryList1.map((bigItem,bigIndex)=>{
                                     return (
                                         <Option key={bigIndex} value={bigItem.id}>{bigItem.name}</Option>
                                     )
@@ -432,10 +577,12 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.getSmallCategory}
+                            onChange={(...arg)=>{
+                                this.getSmallCategory(...arg,'2')
+                            }}
                             >
                                 {
-                                this.state.bigCategoryList.map((bigItem,bigIndex)=>{
+                                this.state.bigCategoryList2.map((bigItem,bigIndex)=>{
                                     return (
                                         <Option key={bigIndex} value={bigItem.id}>{bigItem.name}</Option>
                                     )
@@ -451,10 +598,10 @@ class GoodsEdit extends Component{
                             style={{ width:140 }}
                             optionFilterProp="children"
                             className="selectBox"
-                            onChange={this.smallCategoryChange}
+                            onChange={(...arg)=>{this.smallCategoryChange(...arg,'2')}}
                             >
                                 {
-                                this.state.smallCategoryList.map((bigItem,bigIndex)=>{
+                                this.state.smallCategoryList2.map((bigItem,bigIndex)=>{
                                     return (
                                         <Option key={bigIndex} value={bigItem.id}>{bigItem.name}</Option>
                                     )
@@ -489,7 +636,7 @@ class GoodsEdit extends Component{
                                     </Row>
                                 </Col>
                                 <Col span={5}>
-                                    <p className="deleteBtn" onClick={()=>{this.delete_goodsInventorys(index)}}>删除</p>
+                                    <p className="deleteBtn" onClick={()=>{this.confirm_delete(index)}}>删除</p>
                                 </Col>
                             </Row>
                         )

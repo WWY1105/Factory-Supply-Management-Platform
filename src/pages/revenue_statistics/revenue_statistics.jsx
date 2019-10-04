@@ -2,6 +2,8 @@ import React,{Component} from 'react'
 import {Row,Col,DatePicker,message } from 'antd'
 import './revenue_statistics.less'
 import moment from 'moment';
+import 'moment/locale/zh-cn';
+moment.locale('zh-cn');
 const { MonthPicker } = DatePicker;
 const dateFormat = 'YYYY-MM-DD';
 const monthFormat = 'YYYY-MM';
@@ -95,6 +97,7 @@ class RevenueStatistics extends Component{
             <DatePicker
             mode="year"
             format="YYYY"
+            placeholder="请选择"
             value={this.state.year_value}
             onChange={this.changeYearValue}
             onPanelChange={this.changeRender}
@@ -105,6 +108,7 @@ class RevenueStatistics extends Component{
         else {
         YearPicker= (
             <DatePicker
+            placeholder="请选择"
             mode="year"
             format="YYYY"
             value={this.state.year_value}
@@ -122,18 +126,18 @@ class RevenueStatistics extends Component{
                             <Col span={24} className="textLeft smallTitle">日期</Col>
                             <Col span={24}>
                                 <Row type="flex" justify="center">
-                                    <DatePicker value={this.state.date_value} onChange={this.changeDatehValue} defaultValue={moment(defaultYear+'/'+defaultMonth+'/'+defaultDay, dateFormat)}/>
+                                    <DatePicker placeholder="请选择" value={this.state.date_value} onChange={this.changeDatehValue} defaultValue={moment(defaultYear+'/'+defaultMonth+'/'+defaultDay, dateFormat)}/>
                                 </Row>
                             </Col>
                             <Col span={24} className="smallTitle">
                                 <Row type="flex" justify="space-between">
                                     <Col span={12} >
                                         <p className="midTitle">日订单数量</p>
-                                        <p className="numTitle">{this.state.dayOrderCount}条</p>
+                                        <p className="numTitle">{this.state.dayOrderCount?this.state.dayOrderCount:0}条</p>
                                     </Col>
                                     <Col span={12} >
                                         <p className="midTitle textRight">日订单金额</p>
-                                        <p className="numTitle textRight">{this.state.dayOrderAmount}</p>
+                                        <p className="numTitle textRight">{this.state.dayOrderAmount?this.state.dayOrderAmount:0}</p>
                                     </Col>
                                 </Row>
                             </Col>
@@ -145,6 +149,7 @@ class RevenueStatistics extends Component{
                             <Col span={24}>
                                 <Row type="flex" justify="center">
                                     <MonthPicker 
+                                    placeholder="请选择"
                                     defaultValue={moment(defaultYear+'/'+defaultMonth, monthFormat)} 
                                     format={monthFormat} 
                                     value={this.state.month_value}
@@ -155,11 +160,11 @@ class RevenueStatistics extends Component{
                                 <Row type="flex" justify="space-between">
                                     <Col span={12} >
                                         <p className="midTitle">月订单数量</p>
-                                        <p className="numTitle">{this.state.monthOrderCount}条</p>
+                                        <p className="numTitle">{this.state.monthOrderCount?this.state.monthOrderCount:0}条</p>
                                     </Col>
                                     <Col span={12} >
                                         <p className="midTitle textRight">月订单金额</p>
-                                        <p className="numTitle textRight">{this.state.monthOrderAmount}</p>
+                                        <p className="numTitle textRight">{this.state.monthOrderAmount?this.state.monthOrderAmount:0}</p>
                                     </Col>
                                 </Row>
                             </Col>
@@ -175,11 +180,11 @@ class RevenueStatistics extends Component{
                                 <Row type="flex" justify="space-between">
                                     <Col span={12} >
                                         <p className="midTitle">年订单数量</p>
-                                        <p className="numTitle">{this.state.yearOrderCount}条</p>
+                                        <p className="numTitle">{this.state.yearOrderCount?this.state.yearOrderCount:0}条</p>
                                     </Col>
                                     <Col span={12} >
                                         <p className="midTitle textRight">年订单金额</p>
-                                        <p className="numTitle textRight">{this.state.yearOrderAmount}</p>
+                                        <p className="numTitle textRight">{this.state.yearOrderAmount?this.state.yearOrderAmount:0}</p>
                                     </Col>
                                 </Row>
                             </Col>

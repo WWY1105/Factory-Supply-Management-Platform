@@ -1,6 +1,7 @@
 import React,{Component} from 'react'
 import './registerComponent.less'
 import { Button,Row,Col,Input,message,Form } from 'antd';
+import { Link,withRouter  } from 'react-router-dom'
 import commonObj from '../../assets/js/common'
 const FormItem = Form.Item; 
 let {checkPhone}={...commonObj}
@@ -34,10 +35,6 @@ class RegisterComponent extends Component{
                         validateFlag=false;
                         break;
                     }else{
-                        if(item=='mobile'&& checkPhone(values[item])){
-                            message.error('请填写正确格式的手机号');
-                            break;
-                        }
                         validateFlag=true;
                     }
                 }
@@ -45,18 +42,34 @@ class RegisterComponent extends Component{
             }
         });
         if(validateFlag){
+            if(form.getFieldValue('newPassword').trim().length<6){
+                message.error('密码长度至少六位');
+                return false;
+            }
             if(form.getFieldValue('newPassword')!=form.getFieldValue('newPasswordConfirm')){
                 message.error('您输入的密码不一致');
                 return false;
             }
-            window.post('business/user/register',{
+            let url;
+            if(this.props.forgetPass=='true'){
+                // 忘记密码
+                url='business/user/resetPassword'
+            }else{
+                url='business/user/register';
+            }
+            window.post(url,{
                 'mobile':form.getFieldValue('mobile'),
                 'code':form.getFieldValue('code'),
                 'password':form.getFieldValue('newPassword')
             }).then((res)=>{return res.json()}).then(
                 (res)=>{
                    if(res.code=='10000'){
-                     this.props.history.push('/index')  
+                       message.success('操作成功',1,()=>{
+                        this.props.history.push({
+                            pathname:'/'
+                        })  
+                       })
+                     
                    }else{
                     message.error(res.message)
                    }
@@ -93,12 +106,10 @@ class RegisterComponent extends Component{
         let flag=false;
         let mobile=''
         that.props.form.validateFields((err, values) => {
-            // console.log(checkPhone(values.mobile))
-            // console.log(!values.mobile)
 
             if (!err) {
-                if(!values.mobile||checkPhone(values.mobile)){
-                    message.error('请填写正确格式的手机号');
+                if(!values.mobile){
+                    message.error('请填写手机号');
                     flag= false;
                 }else{
                     mobile=values.mobile;
@@ -226,4 +237,4 @@ class RegisterComponent extends Component{
     }
 }
 
-export default Form.create()(RegisterComponent);;
+export default withRouter(Form.create()(RegisterComponent));;

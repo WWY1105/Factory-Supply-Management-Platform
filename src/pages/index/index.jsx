@@ -22,7 +22,7 @@ import TopBar from '../../component/topBar/topBar'
 import {Route ,Switch} from 'react-router-dom'
 // const {changeTab} =  {...commonObj}
 const {Content,Header}=Layout;
-class Index extends Component {
+class Indexpage extends Component {
     constructor(props) {
         super(props)
         this.state =  {
@@ -95,4 +95,4 @@ const mapDispatchToProps = (dispatch, ownProps) =>  {
 
 //   ------------------------------------------------------------
 
-export default connect(mapStateToProps, mapDispatchToProps)(Index); 
+export default connect(mapStateToProps, mapDispatchToProps)(Indexpage); 

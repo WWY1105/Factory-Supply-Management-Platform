@@ -121,7 +121,7 @@ class Factory_Information extends Component{
                 <div className="loginContent">
                   <Form layout="vertical" onSubmit={this.handleSubmit} {...formItemLayout}>
                   <Form.Item label=".">
-                    <p className="mianTitle">工厂信息{factoryName}</p>
+                    <p className="mianTitle">工厂信息</p>
                   </Form.Item>
                     <Form.Item label=" 工厂名称">
                         {

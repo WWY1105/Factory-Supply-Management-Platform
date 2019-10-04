@@ -22,6 +22,17 @@ class LoginComponent extends Component{
         obj[name]=val;
         that.setState(obj)
     }
+    // 去注册
+    toRegister=()=>{
+        this.props.history.push({
+            pathname:'/register'
+        })
+    }
+    toForgetPass=()=>{
+        this.props.history.push({
+            pathname:'/forgetPass'
+        })
+    }
     // 点击登陆
     toLogin(){
         //  console.log(window)
@@ -89,14 +100,14 @@ class LoginComponent extends Component{
                         <Col span={6} order={4}>
                             <Col span={10} order={3} offset={6}>   
                                 <Button type="primary" className="loginBtn" onClick={()=>{this.toLogin()}}>登陆</Button>
-                                <Button type="primary" className="loginBtn transLoginBtn" onClick={()=>{this.props.toRegister()}}>工厂注册</Button>
+                                <Button type="primary" className="loginBtn transLoginBtn" onClick={()=>{this.toRegister()}}>工厂注册</Button>
                             </Col>
                         </Col>
                     </Row>
                     <Row justify="center" align="middle" type="flex">
                         <Col span={6} order={4}>
                             <Col span={10} order={3}  offset={6}>
-                                <p className="forgetPass" onClick={()=>{this.props.toRegister()}}> 忘记密码</p>
+                                <p className="forgetPass" onClick={()=>{this.toForgetPass()}}> 忘记密码</p>
                             </Col>
                         </Col>
                     </Row>

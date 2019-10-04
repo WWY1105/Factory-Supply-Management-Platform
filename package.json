@@ -2,6 +2,7 @@
       "name": "myreact",
       "version": "0.1.0",
       "private": true,
+      "homepage": "./",
       "dependencies": {
             "antd": "^3.23.1",
             "antd-mobile": "^2.2.11",
